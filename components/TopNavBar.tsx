@@ -91,8 +91,8 @@ const TopNavBar = () => {
         <Image
           src={theme === "dark" ? "/logo-dark.png" : "/logo.png"}
           alt="Company Wordmark"
-          width={202}
-          height={30}
+          width={162}
+          height={20}
         />
       </div>
       <div className="flex items-center gap-2">

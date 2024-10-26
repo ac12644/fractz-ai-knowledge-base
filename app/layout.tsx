@@ -7,8 +7,9 @@ import { ThemeProvider } from "@/components/theme-provider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Knowledge Base",
-  description: "Chat with an AI assistant",
+  title: "FRACTZ - Knowledge Base",
+  description:
+    "Get instant answers and insights with FRACTZ’s AI assistant – your smart, always-on source for knowledge and support.",
 };
 
 export default function RootLayout({

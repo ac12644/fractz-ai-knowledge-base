@@ -607,11 +607,12 @@ function ChatArea() {
                     resources.
                   </p>
                 </div>
+
                 <div className="flex items-center gap-3">
                   <WandSparkles className="text-muted-foreground" />
                   <p className="text-muted-foreground">
                     I&apos;m a whiz at finding information! I can dig through
-                    your knowledge base.
+                    knowledge base.
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
