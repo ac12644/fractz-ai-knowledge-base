@@ -141,7 +141,7 @@ export async function POST(req: Request) {
       : "No information found for this query."
   }
 
-  Please provide responses that only use the information you have been given. If no information is available or if the information is not relevant for answering the question, you can redirect the user to a human agent for further assistance.Respond in HTML format, using <h2>, <p>, <ul>, <li>, and <a> tags as appropriate for headings, text, lists, and links. Ensure the layout is well-organized, with links clearly styled, and structure the response for readability.
+  Please provide responses that only use the information you have been given. If no information is available or if the information is not relevant for answering the question, you can redirect the user to a human agent for further assistance.Respond in HTML format, using <h2>, <p>, <ul>, <li>, and <a> tags as appropriate for headings, text, lists, and links(should have target _blank). Ensure the layout is well-organized, with links clearly styled, and structure the response for readability.
 
   ${categoriesContext}
 
