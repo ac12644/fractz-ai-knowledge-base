@@ -46,7 +46,7 @@ const ColorCircle = ({
 
 const TopNavBar = () => {
   const { theme, setTheme } = useTheme();
-  const [colorTheme, setColorTheme] = useState<ThemeName>("neutral");
+  const [colorTheme, setColorTheme] = useState<ThemeName>("violet");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
