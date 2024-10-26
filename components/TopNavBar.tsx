@@ -52,7 +52,7 @@ const TopNavBar = () => {
   useEffect(() => {
     setMounted(true);
     const savedColorTheme = (localStorage.getItem("color-theme") ||
-      "neutral") as ThemeName;
+      "violet") as ThemeName;
     setColorTheme(savedColorTheme);
     applyTheme(savedColorTheme, theme === "dark");
   }, [theme]);
