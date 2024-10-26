@@ -141,7 +141,7 @@ const TopNavBar = () => {
           </DropdownMenuContent>
         </DropdownMenu>
         <Link
-          href="https://cal.com/fractz/book-free-consultation"
+          href="https://cal.com/fractz/book-free-consultation?notes=Knowledge%20Base"
           target="_blank"
           rel="noopener noreferrer"
         >
