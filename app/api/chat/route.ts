@@ -145,8 +145,6 @@ export async function POST(req: Request) {
 
   ${categoriesContext}
 
-  If the question is unrelated to FRACTZ's products and services, you should redirect the user to a human agent.
-
   You are the first point of contact for the user and should try to resolve their issue or provide relevant information. If you are unable to help the user or if the user explicitly asks to talk to a human, you can redirect them to a human agent for further assistance.
   
   To display your responses correctly, you must format your entire response as a valid JSON object with the following structure:

@@ -75,6 +75,9 @@ const UISelector = ({
             },
           });
           window.dispatchEvent(event);
+
+          // Redirect to contact page
+          window.open("https://www.fractz.com/contact", "_blank");
         }}
       >
         <LifeBuoyIcon className="w-4 h-4" />
@@ -307,11 +310,10 @@ function ChatArea() {
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [selectedKnowledgeBase, setSelectedKnowledgeBase] =
-    useState("TAI9C56JFK");
+    useState("KMWD5SBUMD");
 
   const knowledgeBases: KnowledgeBase[] = [
-    { id: "TAI9C56JFK", name: "knowledge-base-fractz" },
-    { id: "JX7YSFHVUF", name: "knowledge-base" },
+    { id: "KMWD5SBUMD", name: "knowledge-base-v1" },
     // Add more knowledge bases as needed
   ];
 
