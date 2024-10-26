@@ -233,7 +233,7 @@ const ConversationHeader: React.FC<ConversationHeaderProps> = ({
         <>
           <Avatar className="w-10 h-10 border">
             <AvatarImage
-              src="/ant-logo.svg"
+              src="/fractz-logo.png"
               alt="AI Assistant Avatar"
               width={40}
               height={40}

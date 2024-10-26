@@ -79,7 +79,7 @@ export async function POST(req: Request) {
       messagesReceived: messages.length,
       latestMessageLength: latestMessage.length,
       anthropicKeySlice: process.env.ANTHROPIC_API_KEY?.slice(0, 4) + "****",
-    }),
+    })
   ).slice(0, MAX_DEBUG_LENGTH);
 
   // Initialize variables for RAG retrieval
@@ -104,7 +104,7 @@ export async function POST(req: Request) {
     console.log("🔍 RAG Retrieved:", isRagWorking ? "YES" : "NO");
     console.log(
       "✅ RAG retrieval completed successfully. Context:",
-      retrievedContext.slice(0, 100) + "...",
+      retrievedContext.slice(0, 100) + "..."
     );
   } catch (error) {
     console.error("💀 RAG Error:", error);
@@ -132,16 +132,20 @@ export async function POST(req: Request) {
     : "";
 
   // Change the system prompt company for your use case
-  const systemPrompt = `You are acting as an Anthropic customer support assistant chatbot inside a chat window on a website. You are chatting with a human user who is asking for help about Anthropic's products and services. When responding to the user, aim to provide concise and helpful responses while maintaining a polite and professional tone.
+  const systemPrompt = `You are acting as an FRACTZ customer support assistant chatbot inside a chat window on a website. You are chatting with a human user who is asking for help about FRACTZ's products and AI solutions. When responding to the user, aim to provide concise and helpful responses while maintaining a polite and professional tone.
 
   To help you answer the user's question, we have retrieved the following information for you. It may or may not be relevant (we are using a RAG pipeline to retrieve this information):
-  ${isRagWorking ? `${retrievedContext}` : "No information found for this query."}
+  ${
+    isRagWorking
+      ? `${retrievedContext}`
+      : "No information found for this query."
+  }
 
   Please provide responses that only use the information you have been given. If no information is available or if the information is not relevant for answering the question, you can redirect the user to a human agent for further assistance.
 
   ${categoriesContext}
 
-  If the question is unrelated to Anthropic's products and services, you should redirect the user to a human agent.
+  If the question is unrelated to FRACTZ's products and services, you should try to get products from https://www.fractz.com/ and if not found redirect the user to a human agent.
 
   You are the first point of contact for the user and should try to resolve their issue or provide relevant information. If you are unable to help the user or if the user explicitly asks to talk to a human, you can redirect them to a human agent for further assistance.
   
@@ -154,7 +158,11 @@ export async function POST(req: Request) {
       "debug": {
         "context_used": true|false
       },
-      ${USE_CATEGORIES ? '"matched_categories": ["category_id1", "category_id2"],' : ""}
+      ${
+        USE_CATEGORIES
+          ? '"matched_categories": ["category_id1", "category_id2"],'
+          : ""
+      }
       "redirect_to_agent": {
         "should_redirect": boolean,
         "reason": "Reason for redirection (optional, include only if should_redirect is true)"
@@ -193,14 +201,14 @@ export async function POST(req: Request) {
       "reason": "Complex technical issue requiring human expertise"
     }
   }
-  `
+  `;
 
-  function sanitizeAndParseJSON(jsonString : string) {
+  function sanitizeAndParseJSON(jsonString: string) {
     // Replace newlines within string values
-    const sanitized = jsonString.replace(/(?<=:\s*")(.|\n)*?(?=")/g, match => 
+    const sanitized = jsonString.replace(/(?<=:\s*")(.|\n)*?(?=")/g, (match) =>
       match.replace(/\n/g, "\\n")
     );
-  
+
     try {
       return JSON.parse(sanitized);
     } catch (parseError) {
@@ -235,10 +243,12 @@ export async function POST(req: Request) {
     console.log("✅ Message generation completed");
 
     // Extract text content from the response
-    const textContent = "{" + response.content
-      .filter((block): block is Anthropic.TextBlock => block.type === "text")
-      .map((block) => block.text)
-      .join(" ");
+    const textContent =
+      "{" +
+      response.content
+        .filter((block): block is Anthropic.TextBlock => block.type === "text")
+        .map((block) => block.text)
+        .join(" ");
 
     // Parse the JSON response
     let parsedResponse;
@@ -274,7 +284,7 @@ export async function POST(req: Request) {
     if (ragSources.length > 0) {
       apiResponse.headers.set(
         "x-rag-sources",
-        sanitizeHeaderValue(JSON.stringify(ragSources)),
+        sanitizeHeaderValue(JSON.stringify(ragSources))
       );
     }
 
