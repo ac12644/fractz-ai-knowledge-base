@@ -249,8 +249,10 @@ const ConversationHeader: React.FC<ConversationHeaderProps> = ({
             <AvatarFallback>AI</AvatarFallback>
           </Avatar>
           <div>
-            <h3 className="text-sm font-medium leading-none">AI Agent</h3>
-            <p className="text-sm text-muted-foreground">Customer support</p>
+            <h3 className="text-sm font-medium leading-none">FRACTZ AI</h3>
+            <p className="text-sm text-muted-foreground">
+              Customer support agent
+            </p>
           </div>
         </>
       )}
