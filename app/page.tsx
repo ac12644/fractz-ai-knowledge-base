@@ -15,20 +15,14 @@ export default function Home() {
   return (
     <div className="flex flex-col h-screen w-full">
       <TopNavBar />
-      <div className="flex flex-1 h-full overflow-hidden w-full">
-        {/* Left sidebar, hidden on smaller screens */}
+      <div className="flex flex-1 overflow-hidden h-screen w-full">
         {config.includeLeftSidebar && (
           <div className="hidden md:flex">
             <LeftSidebar />
           </div>
         )}
 
-        {/* Main content area with ChatArea at the bottom */}
-        <div className="flex flex-col flex-1 overflow-auto justify-end">
-          <ChatArea />
-        </div>
-
-        {/* Right sidebar, hidden on smaller screens */}
+        <ChatArea />
         {config.includeRightSidebar && (
           <div className="hidden md:flex">
             <RightSidebar />

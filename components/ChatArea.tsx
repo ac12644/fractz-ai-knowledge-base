@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import rehypeRaw from "rehype-raw";
+import remarkGfm from "remark-gfm";
 import {
   HandHelping,
   WandSparkles,
@@ -81,7 +82,7 @@ const UISelector = ({
         }}
       >
         <LifeBuoyIcon className="w-4 h-4" />
-        <small className="text-sm leading-none">Talk to a human</small>
+        <small className="text-sm leading-none">Write us</small>
       </Button>
     );
   }
@@ -101,11 +102,11 @@ const SuggestedQuestions = ({
   if (!questions || questions.length === 0) return null;
 
   return (
-    <div className="mt-2 pl-10">
+    <div className="mt-2 pl-4 flex flex-wrap gap-2 sm:pl-10 w-full">
       {questions.map((question, index) => (
         <Button
           key={index}
-          className="text-sm mb-2 mr-2 ml-0 text-gray-500 shadow-sm"
+          className="text-xs sm:text-sm mb-2 max-w-full w-full sm:w-auto whitespace-normal break-words text-gray-500 shadow-sm"
           variant="outline"
           size="sm"
           onClick={() => onQuestionClick(question)}
@@ -183,7 +184,10 @@ const MessageContent = ({
 
   return (
     <>
-      <ReactMarkdown rehypePlugins={[rehypeRaw, rehypeHighlight]}>
+      <ReactMarkdown
+        rehypePlugins={[rehypeRaw, rehypeHighlight]}
+        remarkPlugins={[remarkGfm]}
+      >
         {parsed.response || content}
       </ReactMarkdown>
       {parsed.redirect_to_agent && (
@@ -654,9 +658,9 @@ function ChatArea() {
                       </Avatar>
                     )}
                     <div
-                      className={`p-3 rounded-md text-sm max-w-[65%] ${
+                      className={`p-3 rounded-md text-sm max-w-[80%] w-auto inline-block ${
                         message.role === "user"
-                          ? "bg-primary text-primary-foreground"
+                          ? "bg-purple-600 text-white"
                           : "bg-muted border"
                       }`}
                     >
