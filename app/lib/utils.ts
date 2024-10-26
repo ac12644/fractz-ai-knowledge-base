@@ -10,7 +10,7 @@ console.log("🔑 Have AWS AccessKey?", !!process.env.BAWS_ACCESS_KEY_ID);
 console.log("🔑 Have AWS Secret?", !!process.env.BAWS_SECRET_ACCESS_KEY);
 
 const bedrockClient = new BedrockAgentRuntimeClient({
-  region: "us-east-1", // Make sure this matches your Bedrock region
+  region: "eu-central-1", // Make sure this matches your Bedrock region
   credentials: {
     accessKeyId: process.env.BAWS_ACCESS_KEY_ID!,
     secretAccessKey: process.env.BAWS_SECRET_ACCESS_KEY!,
@@ -31,7 +31,7 @@ export interface RAGSource {
 export async function retrieveContext(
   query: string,
   knowledgeBaseId: string,
-  n: number = 3,
+  n: number = 3
 ): Promise<{
   context: string;
   isRagWorking: boolean;
