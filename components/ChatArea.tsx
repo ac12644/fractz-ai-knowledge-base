@@ -236,10 +236,11 @@ const ConversationHeader: React.FC<ConversationHeaderProps> = ({
         <>
           <Avatar className="w-10 h-10 border">
             <AvatarImage
-              src="/fractz-logo.png"
+              src="/bot.jpg"
               alt="AI Assistant Avatar"
-              width={40}
-              height={40}
+              width={80}
+              height={80}
+              className="object-cover w-full h-full"
             />
             <AvatarFallback>AI</AvatarFallback>
           </Avatar>
@@ -274,6 +275,7 @@ const ConversationHeader: React.FC<ConversationHeaderProps> = ({
         </DropdownMenuContent>
       </DropdownMenu>
       <DropdownMenu>
+        {/* 
         <DropdownMenuTrigger asChild>
           <Button
             variant="outline"
@@ -285,6 +287,7 @@ const ConversationHeader: React.FC<ConversationHeaderProps> = ({
             <ChevronDown className="ml-2 h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
+        */}
         <DropdownMenuContent>
           {knowledgeBases.map((kb) => (
             <DropdownMenuItem
@@ -590,10 +593,11 @@ function ChatArea() {
             <div className="flex flex-col items-center justify-center h-full animate-fade-in-up">
               <Avatar className="w-10 h-10 mb-4 border">
                 <AvatarImage
-                  src="/fractz-logo.png"
+                  src="/bot.jpg"
                   alt="AI Assistant Avatar"
-                  width={40}
-                  height={40}
+                  width={50}
+                  height={50}
+                  className="object-cover w-full h-full"
                 />
               </Avatar>
               <h2 className="text-2xl font-semibold mb-8">
@@ -642,8 +646,9 @@ function ChatArea() {
                     {message.role === "assistant" && (
                       <Avatar className="w-8 h-8 mr-2 border">
                         <AvatarImage
-                          src="/fractz-logo.png"
+                          src="/bot.jpg"
                           alt="AI Assistant Avatar"
+                          className="object-cover w-full h-full"
                         />
                         <AvatarFallback>AI</AvatarFallback>
                       </Avatar>
