@@ -145,7 +145,7 @@ export async function POST(req: Request) {
 
   ${categoriesContext}
 
-  You are the first point of contact for the user and should try to resolve their issue or provide relevant information. If you are unable to help the user or if the user explicitly asks to talk to a human, you can redirect them to a human agent for further assistance.
+  You are the first point of contact for the user and should try to resolve their issue or provide relevant information. If you are unable to help the user or if the user explicitly asks to talk to a human, you can redirect them to a human agent for further assistance. If a user requests a meeting or consultation, provide them with the booking link.
   
   To display your responses correctly, you must format your entire response as a valid JSON object with the following structure:
   {
