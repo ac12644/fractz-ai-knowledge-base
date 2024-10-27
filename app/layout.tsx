@@ -1,5 +1,6 @@
 import React from "react";
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -46,7 +47,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" dir="ltr" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link rel="icon" href="/favicon.ico" />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/apple-touch-icon.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicon-32x32.png"
+        />
+      </head>
       <body className={`${inter.className} flex flex-col h-full`}>
         <ThemeProvider
           attribute="class"
@@ -55,6 +72,22 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          <Script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "http://schema.org",
+                "@type": "WebSite",
+                url: "https://knowledge-base.fractz.com",
+                potentialAction: {
+                  "@type": "SearchAction",
+                  target:
+                    "https://knowledge-base.fractz.com/?search={search_term}",
+                  "query-input": "required name=search_term",
+                },
+              }),
+            }}
+          />
         </ThemeProvider>
       </body>
     </html>
