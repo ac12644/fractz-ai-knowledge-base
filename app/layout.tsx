@@ -63,6 +63,13 @@ export default function RootLayout({
           sizes="32x32"
           href="/favicon-32x32.png"
         />
+        <meta
+          property="og:image"
+          content="https://knowledge-base.fractz.com/_next/image?url=%2Flogo.png&w=384&q=75https://www.fractz.com/asset/logo.png"
+        />
+        <meta property="og:image:width" content="200" />
+        <meta property="og:image:height" content="200" />
+        <meta property="og:type" content="website" />
       </head>
       <body className={`${inter.className} flex flex-col h-full`}>
         <ThemeProvider
