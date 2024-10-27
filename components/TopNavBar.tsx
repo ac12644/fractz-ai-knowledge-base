@@ -91,7 +91,7 @@ const TopNavBar = () => {
         <Image
           src={theme === "dark" ? "/logo-dark.png" : "/logo.png"}
           alt="Company Wordmark"
-          width={162}
+          width={132}
           height={20}
         />
       </div>

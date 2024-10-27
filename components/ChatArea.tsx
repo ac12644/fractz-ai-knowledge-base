@@ -583,8 +583,8 @@ function ChatArea() {
   }, []);
 
   return (
-    <Card className="flex-1 flex flex-col mb-4 mr-4 ml-4 max-h-screen">
-      <CardContent className="flex-1 flex flex-col overflow-hidden pt-4 px-4 pb-0 max-h-[80vh]">
+    <Card className="flex-1 flex flex-col mb-4 mr-4 ml-4">
+      <CardContent className="flex-1 flex flex-col overflow-hidden pt-4 px-4 pb-0">
         <ConversationHeader
           selectedModel={selectedModel}
           setSelectedModel={setSelectedModel}
@@ -594,7 +594,7 @@ function ChatArea() {
           setSelectedKnowledgeBase={setSelectedKnowledgeBase}
           knowledgeBases={knowledgeBases}
         />
-        <div className="flex-1 overflow-y-auto p-4 space-y-4 max-h-[65vh]">
+        <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full animate-fade-in-up">
               <Avatar className="w-10 h-10 mb-4 border">
@@ -723,7 +723,7 @@ function ChatArea() {
                 <div className="animate-spin h-5 w-5 border-t-2 border-white rounded-full" />
               ) : (
                 <>
-                  Send Message
+                  Send
                   <Send className="h-4 w-4" />
                 </>
               )}
