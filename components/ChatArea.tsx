@@ -613,16 +613,15 @@ function ChatArea() {
                 <div className="flex items-center gap-3">
                   <HandHelping className="text-muted-foreground" />
                   <p className="text-muted-foreground">
-                    Need guidance? I&apos;ll help navigate tasks using internal
-                    resources.
+                    Need help? Ask how FRACTZ can support your business.
                   </p>
                 </div>
 
                 <div className="flex items-center gap-3">
                   <WandSparkles className="text-muted-foreground" />
                   <p className="text-muted-foreground">
-                    I&apos;m a whiz at finding information! I can dig through
-                    knowledge base.
+                    I&apos;m a whiz at finding information! Let me search the
+                    knowledge base for you.
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
