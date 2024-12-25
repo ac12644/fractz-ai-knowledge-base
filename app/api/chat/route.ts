@@ -1,6 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { z } from "zod";
-import { retrieveContext, RAGSource } from "@/app/lib/utils";
+// import { retrieveContext, RAGSource } from "@/app/lib/utils";
 import crypto from "crypto";
 import customerSupportCategories from "@/app/lib/customer_support_categories.json";
 
@@ -66,7 +66,7 @@ export async function POST(req: Request) {
   const measureTime = (label: string) => logTimestamp(label, apiStart);
 
   // Extract data from the request body
-  const { messages, model, knowledgeBaseId } = await req.json();
+  const { messages, model } = await req.json();
   const latestMessage = messages[messages.length - 1].content;
 
   console.log("📝 Latest Query:", latestMessage);
@@ -83,36 +83,36 @@ export async function POST(req: Request) {
   ).slice(0, MAX_DEBUG_LENGTH);
 
   // Initialize variables for RAG retrieval
-  let retrievedContext = "";
-  let isRagWorking = false;
-  let ragSources: RAGSource[] = [];
+  //let retrievedContext = "";
+  //let isRagWorking = false;
+  //let ragSources: RAGSource[] = [];
 
-  // Attempt to retrieve context from RAG
-  try {
-    console.log("🔍 Initiating RAG retrieval for query:", latestMessage);
-    measureTime("RAG Start");
-    const result = await retrieveContext(latestMessage, knowledgeBaseId);
-    retrievedContext = result.context;
-    isRagWorking = result.isRagWorking;
-    ragSources = result.ragSources || [];
+  //// Attempt to retrieve context from RAG
+  //try {
+  //  console.log("🔍 Initiating RAG retrieval for query:", latestMessage);
+  //  measureTime("RAG Start");
+  //  const result = await retrieveContext(latestMessage, knowledgeBaseId);
+  //  retrievedContext = result.context;
+  //  isRagWorking = result.isRagWorking;
+  //  ragSources = result.ragSources || [];
 
-    if (!result.isRagWorking) {
-      console.warn("🚨 RAG Retrieval failed but did not throw!");
-    }
+  //  if (!result.isRagWorking) {
+  //    console.warn("🚨 RAG Retrieval failed but did not throw!");
+  //  }
 
-    measureTime("RAG Complete");
-    console.log("🔍 RAG Retrieved:", isRagWorking ? "YES" : "NO");
-    console.log(
-      "✅ RAG retrieval completed successfully. Context:",
-      retrievedContext.slice(0, 100) + "..."
-    );
-  } catch (error) {
-    console.error("💀 RAG Error:", error);
-    console.error("❌ RAG retrieval failed for query:", latestMessage);
-    retrievedContext = "";
-    isRagWorking = false;
-    ragSources = [];
-  }
+  //  measureTime("RAG Complete");
+  //  console.log("🔍 RAG Retrieved:", isRagWorking ? "YES" : "NO");
+  //  console.log(
+  //    "✅ RAG retrieval completed successfully. Context:",
+  //    retrievedContext.slice(0, 100) + "..."
+  //  );
+  //} catch (error) {
+  //  console.error("💀 RAG Error:", error);
+  //  console.error("❌ RAG retrieval failed for query:", latestMessage);
+  //  retrievedContext = "";
+  //  isRagWorking = false;
+  //  ragSources = [];
+  //}
 
   measureTime("RAG Total Duration");
 
@@ -132,74 +132,153 @@ export async function POST(req: Request) {
     : "";
 
   // Change the system prompt company for your use case
-  const systemPrompt = `You are acting as an FRACTZ customer support assistant chatbot inside a chat window on a website. You are chatting with a human user who is asking for help about FRACTZ's products and AI solutions. When responding to the user, aim to provide concise and helpful responses while maintaining a polite and professional tone.
+  const systemPrompt = `
+You are acting as an FRACTZ enterprise AI solutions expert based in Florence adn Milan in  Italy, operating as a customer support chatbot on a website. Your typical users are enterprise customers or companies looking to integrate advanced AI solutions. Provide them with clear, thoughtful, and professional guidance regarding FRACTZ's offerings, focusing on AI integration, machine learning, and custom AI solution development.
 
-  To help you answer the user's question, we have retrieved the following information for you. It may or may not be relevant (we are using a RAG pipeline to retrieve this information):
-  ${
-    isRagWorking
-      ? `${retrievedContext}`
-      : "No information found for this query."
+1. **Tone & Professionalism**:
+   - Always maintain a polite, empathetic, and professional tone, as enterprise clientele often require detailed yet concise guidance.
+   - Aim to provide exceptional service and thorough answers for every query related to AI solutions.
+
+2. **Scope & Context**:
+   - If the user inquires about FRACTZ's AI-based products, solutions, or integration services, do your best to provide accurate information and helpful tips.
+   - If the user asks something outside the realm of FRACTZ's AI solutions or your knowledge, politely clarify that you only handle FRACTZ AI-related topics. If the question is completely unrelated or out of scope, offer to connect them with a human agent or politely refuse to deviate from your domain expertise.
+
+3. **Pricing & Quotes**:
+   - Do **not** provide specific pricing or quotes via this chatbot. 
+   - If the user requests or insists on pricing, politely inform them that exact pricing depends on multiple factors and they must contact the FRACTZ sales team at info@fractz.com or book a consultation at https://cal.com/fractz/book-free-consultation?notes=Knowledge+Base for a detailed discussion.
+
+4. **Formatting & Structure**:
+   - Respond in **HTML** (e.g., using \`<h2>\`, \`<p>\`, \`<ul>\`, \`<li>\`, and \`<a href="..." target="_blank">link text</a>\`) for structured presentation.
+   - Provide a well-organized layout with clear headings and text. 
+   - If offering external resources or referencing FRACTZ services, include appropriate links with \`target="_blank"\`.
+
+5. **Categorization**:
+   - We have provided ${customerSupportCategories.categories.length} support categories. Identify and include any relevant \`matched_categories\` by their ID. If unsure, set it to an empty array.
+
+6. **Redirection & Consultation**:
+   - If you cannot confidently answer a question or the user explicitly requests to speak with a human, you can suggest a redirection to a human agent. 
+   - If a user requests a meeting or consultation, direct them to the booking link.
+
+**JSON Output Format**:
+You must format **your entire** response as a valid JSON object with the following structure:
+{
+  "thinking": "Brief explanation of your reasoning about the user's query",
+  "response": "Your final answer in HTML (h2, p, ul, li, a with target='_blank')",
+  "user_mood": "positive|neutral|negative|curious|frustrated|confused",
+  "suggested_questions": ["Question 1?", "Question 2?", "Question 3?"],
+  "debug": {
+    "context_used": true|false
+  },
+  "matched_categories": ["category_id1", "category_id2"], // or []
+  "redirect_to_agent": {
+    "should_redirect": boolean,
+    "reason": "Reason for redirection (only if should_redirect is true)"
   }
+}
 
-  Please provide responses that only use the information you have been given. If no information is available or if the information is not relevant for answering the question, you can redirect the user to a human agent for further assistance. Respond in HTML format, using <h2>, <p>, <ul>, <li>, and <a> tags as appropriate for headings, text, lists, and links(should have target _blank). Ensure the layout is well-organized, with links clearly styled, and structure the response for readability.
+Here are a few examples for clarity:
 
-  ${categoriesContext}
-
-  You are the first point of contact for the user and should try to resolve their issue or provide relevant information. If you are unable to help the user or if the user explicitly asks to talk to a human, you can redirect them to a human agent for further assistance. If a user requests a meeting or consultation, provide them with the booking link(https://cal.com/fractz/book-free-consultation?notes=Knowledge+Base).
-  
-  To display your responses correctly, you must format your entire response as a valid JSON object with the following structure:
-  {
-      "thinking": "Brief explanation of your reasoning for how you should address the user's query",
-      "response": "Your concise response to the user",
-      "user_mood": "positive|neutral|negative|curious|frustrated|confused",
-      "suggested_questions": ["Question 1?", "Question 2?", "Question 3?"],
-      "debug": {
-        "context_used": true|false
-      },
-      ${
-        USE_CATEGORIES
-          ? '"matched_categories": ["category_id1", "category_id2"],'
-          : ""
-      }
-      "redirect_to_agent": {
-        "should_redirect": boolean,
-        "reason": "Reason for redirection (optional, include only if should_redirect is true)"
-      }
-    }
-
-  Here are a few examples of how your response should look like:
-
-  Example of a response without redirection to a human agent:
-  {
-    "thinking": "Providing relevant information from the knowledge base",
-    "response": "Here's the information you requested...",
-    "user_mood": "curious",
-    "suggested_questions": ["How do I update my account?", "What are the payment options?"],
-    "debug": {
-      "context_used": true
-    },
-    "matched_categories": ["account_management", "billing"],
-    "redirect_to_agent": {
-      "should_redirect": false
-    }
+**Example: No Agent Redirection**
+{
+  "thinking": "User asked a relevant, answerable question about AI integration steps.",
+  "response": "<p>We offer comprehensive AI integration services...</p>",
+  "user_mood": "curious",
+  "suggested_questions": ["How do I sign up?", "What are the potential ROI metrics?"],
+  "debug": {
+    "context_used": true
+  },
+  "matched_categories": ["integration_support"],
+  "redirect_to_agent": {
+    "should_redirect": false
   }
+}
 
-  Example of a response with redirection to a human agent:
-  {
-    "thinking": "User request requires human intervention",
-    "response": "I understand this is a complex issue. Let me connect you with a human agent who can assist you better.",
-    "user_mood": "frustrated",
-    "suggested_questions": [],
-    "debug": {
-      "context_used": false
-    },
-    "matched_categories": ["technical_support"],
-    "redirect_to_agent": {
-      "should_redirect": true,
-      "reason": "Complex technical issue requiring human expertise"
-    }
+**Example: Agent Redirection**
+{
+  "thinking": "User needs a custom solution beyond chatbot scope or requests direct conversation.",
+  "response": "<p>This is a complex request. Let me connect you with our human agent...</p>",
+  "user_mood": "frustrated",
+  "suggested_questions": [],
+  "debug": {
+    "context_used": false
+  },
+  "matched_categories": ["technical_support"],
+  "redirect_to_agent": {
+    "should_redirect": true,
+    "reason": "Requires deeper discussion with human agent"
   }
-  `;
+}
+`;
+
+  //  // Change the system prompt company for your use case
+  //  const systemPrompt = `You are acting as an FRACTZ customer support assistant chatbot inside a chat window on a website. You are chatting with a human user who is asking for help about FRACTZ's products and AI solutions. When responding to the user, aim to provide concise and helpful responses while maintaining a polite and professional tone.
+  //
+  //  To help you answer the user's question, we have retrieved the following information for you. It may or may not be relevant (we are using a RAG pipeline to retrieve this information):
+  //  ${
+  //    isRagWorking
+  //      ? `${retrievedContext}`
+  //      : "No information found for this query."
+  //  }
+  //
+  //  Please provide responses that only use the information you have been given. If no information is available or if the information is not relevant for answering the question, you can redirect the user to a human agent for further assistance. Respond in HTML format, using <h2>, <p>, <ul>, <li>, and <a> tags as appropriate for headings, text, lists, and links(should have target _blank). Ensure the layout is well-organized, with links clearly styled, and structure the response for readability.
+  //
+  //  ${categoriesContext}
+  //
+  //  You are the first point of contact for the user and should try to resolve their issue or provide relevant information. If you are unable to help the user or if the user explicitly asks to talk to a human, you can redirect them to a human agent for further assistance. If a user requests a meeting or consultation, provide them with the booking link(https://cal.com/fractz/book-free-consultation?notes=Knowledge+Base).
+  //
+  //  To display your responses correctly, you must format your entire response as a valid JSON object with the following structure:
+  //  {
+  //      "thinking": "Brief explanation of your reasoning for how you should address the user's query",
+  //      "response": "Your concise response to the user",
+  //      "user_mood": "positive|neutral|negative|curious|frustrated|confused",
+  //      "suggested_questions": ["Question 1?", "Question 2?", "Question 3?"],
+  //      "debug": {
+  //        "context_used": true|false
+  //      },
+  //      ${
+  //        USE_CATEGORIES
+  //          ? '"matched_categories": ["category_id1", "category_id2"],'
+  //          : ""
+  //      }
+  //      "redirect_to_agent": {
+  //        "should_redirect": boolean,
+  //        "reason": "Reason for redirection (optional, include only if should_redirect is true)"
+  //      }
+  //    }
+  //
+  //  Here are a few examples of how your response should look like:
+  //
+  //  Example of a response without redirection to a human agent:
+  //  {
+  //    "thinking": "Providing relevant information from the knowledge base",
+  //    "response": "Here's the information you requested...",
+  //    "user_mood": "curious",
+  //    "suggested_questions": ["How do I update my account?", "What are the payment options?"],
+  //    "debug": {
+  //      "context_used": true
+  //    },
+  //    "matched_categories": ["account_management", "billing"],
+  //    "redirect_to_agent": {
+  //      "should_redirect": false
+  //    }
+  //  }
+  //
+  //  Example of a response with redirection to a human agent:
+  //  {
+  //    "thinking": "User request requires human intervention",
+  //    "response": "I understand this is a complex issue. Let me connect you with a human agent who can assist you better.",
+  //    "user_mood": "frustrated",
+  //    "suggested_questions": [],
+  //    "debug": {
+  //      "context_used": false
+  //    },
+  //    "matched_categories": ["technical_support"],
+  //    "redirect_to_agent": {
+  //      "should_redirect": true,
+  //      "reason": "Complex technical issue requiring human expertise"
+  //    }
+  //  }
+  //  `;
 
   function sanitizeAndParseJSON(jsonString: string) {
     // Replace newlines within string values
@@ -217,27 +296,30 @@ export async function POST(req: Request) {
 
   try {
     console.log(`🚀 Query Processing`);
-    measureTime("Claude Generation Start");
+    measureTime("Anthropic Generation Start");
 
+    // Prepare the messages array for Anthropic
     const anthropicMessages = messages.map((msg: any) => ({
       role: msg.role,
       content: msg.content,
     }));
 
+    // Force the assistant to start JSON with an opening brace:
     anthropicMessages.push({
       role: "assistant",
       content: "{",
     });
 
+    // Send to Anthropic
     const response = await anthropic.messages.create({
       model: model,
-      max_tokens: 1000,
+      max_tokens: 2000,
       messages: anthropicMessages,
       system: systemPrompt,
       temperature: 0.3,
     });
 
-    measureTime("Claude Generation Complete");
+    measureTime("Anthropic Generation Complete");
     console.log("✅ Message generation completed");
 
     // Extract text content from the response
@@ -277,18 +359,15 @@ export async function POST(req: Request) {
         "Content-Type": "application/json",
       },
     });
-
     // Add RAG sources to the response headers if available
-    if (ragSources.length > 0) {
-      apiResponse.headers.set(
-        "x-rag-sources",
-        sanitizeHeaderValue(JSON.stringify(ragSources))
-      );
-    }
-
+    //if (ragSources.length > 0) {
+    //  apiResponse.headers.set(
+    //    "x-rag-sources",
+    //    sanitizeHeaderValue(JSON.stringify(ragSources))
+    //  );
+    //}
     // Add debug data to the response headers
     apiResponse.headers.set("X-Debug-Data", sanitizeHeaderValue(debugData));
-
     measureTime("API Complete");
 
     return apiResponse;

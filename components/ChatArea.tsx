@@ -187,9 +187,76 @@ const MessageContent = ({
       <ReactMarkdown
         rehypePlugins={[rehypeRaw, rehypeHighlight]}
         remarkPlugins={[remarkGfm]}
+        components={{
+          a: ({ node, ...props }) => (
+            <a
+              {...props}
+              className="text-blue-500 underline hover:text-blue-700"
+              target="_blank"
+              rel="noopener noreferrer"
+            />
+          ),
+          p: ({ node, ...props }) => (
+            <p {...props} className="text-gray-700 leading-relaxed mb-4" />
+          ),
+          h1: ({ node, ...props }) => (
+            <h1 {...props} className="text-3xl font-bold mb-4" />
+          ),
+          h2: ({ node, ...props }) => (
+            <h2 {...props} className="text-2xl font-semibold mb-3" />
+          ),
+          h3: ({ node, ...props }) => (
+            <h3 {...props} className="text-xl font-medium mb-2" />
+          ),
+          h4: ({ node, ...props }) => (
+            <h4 {...props} className="text-lg font-medium mb-1" />
+          ),
+          ul: ({ node, ...props }) => (
+            <ul {...props} className="list-disc pl-6 mb-4 text-gray-700" />
+          ),
+          ol: ({ node, ...props }) => (
+            <ol {...props} className="list-decimal pl-6 mb-4 text-gray-700" />
+          ),
+          li: ({ node, ...props }) => (
+            <li {...props} className="mb-2 text-gray-700" />
+          ),
+          blockquote: ({ node, ...props }) => (
+            <blockquote
+              {...props}
+              className="border-l-4 border-gray-300 pl-4 italic text-gray-600 mb-4"
+            />
+          ),
+
+          img: ({ node, ...props }) => (
+            <img
+              {...props}
+              className="max-w-full h-auto rounded shadow-md my-4"
+              alt={props.alt || "Markdown Image"}
+            />
+          ),
+          hr: ({ node, ...props }) => (
+            <hr {...props} className="border-gray-300 my-4" />
+          ),
+          table: ({ node, ...props }) => (
+            <table
+              {...props}
+              className="table-auto w-full border-collapse border border-gray-300 mb-4"
+            />
+          ),
+          th: ({ node, ...props }) => (
+            <th
+              {...props}
+              className="border border-gray-300 bg-gray-200 p-2 text-left"
+            />
+          ),
+          td: ({ node, ...props }) => (
+            <td {...props} className="border border-gray-300 p-2 text-left" />
+          ),
+        }}
       >
         {parsed.response || content}
       </ReactMarkdown>
+
       {parsed.redirect_to_agent && (
         <UISelector redirectToAgent={parsed.redirect_to_agent} />
       )}
