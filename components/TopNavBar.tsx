@@ -45,17 +45,20 @@ const ColorCircle = ({
 );
 
 const TopNavBar = () => {
-  const { theme, setTheme } = useTheme();
+  const { theme, resolvedTheme, setTheme } = useTheme();
   const [colorTheme, setColorTheme] = useState<ThemeName>("violet");
   const [mounted, setMounted] = useState(false);
-
   useEffect(() => {
     setMounted(true);
-    const savedColorTheme = (localStorage.getItem("color-theme") ||
-      "violet") as ThemeName;
+    const savedColorTheme = (localStorage.getItem("color-theme") || "violet") as ThemeName;
     setColorTheme(savedColorTheme);
-    applyTheme(savedColorTheme, theme === "dark");
-  }, [theme]);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+    const isDark = resolvedTheme === "dark";
+    applyTheme(colorTheme, isDark);
+  }, [resolvedTheme, colorTheme, mounted]);
 
   const applyTheme = (newColorTheme: ThemeName, isDark: boolean) => {
     const root = document.documentElement;
@@ -71,12 +74,16 @@ const TopNavBar = () => {
   const handleThemeChange = (newColorTheme: ThemeName) => {
     setColorTheme(newColorTheme);
     localStorage.setItem("color-theme", newColorTheme);
-    applyTheme(newColorTheme, theme === "dark");
+    applyTheme(newColorTheme, resolvedTheme === "dark");
   };
 
   const handleModeChange = (mode: "light" | "dark" | "system") => {
     setTheme(mode);
-    if (mode !== "system") {
+
+    if (mode === "system") {
+      const isSystemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      applyTheme(colorTheme, isSystemDark);
+    } else {
       applyTheme(colorTheme, mode === "dark");
     }
   };
@@ -89,14 +96,15 @@ const TopNavBar = () => {
     <nav className="text-foreground p-4 flex justify-between items-center">
       <div className="font-bold text-xl flex gap-2 items-center">
         <Image
-          src={theme === "dark" ? "/logo-dark.png" : "/logo.png"}
+          src={resolvedTheme === "dark" ? "/logo-dark.png" : "/logo.png"}
           alt="Company Wordmark"
           width={132}
           height={20}
         />
       </div>
       <div className="flex items-center gap-2">
-        {/* 
+        {/* Uncomment if color theme switching is needed */}
+        {/*
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
