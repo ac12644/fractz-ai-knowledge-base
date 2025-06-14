@@ -172,11 +172,12 @@ const MessageContent = ({
   if (thinking && role === "assistant") {
     return (
       <div className="flex items-center">
-        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-900 mr-2" />
-        <span>Thinking...</span>
+        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-900 dark:border-white mr-2" />
+        <span className="text-gray-900 dark:text-white">Thinking...</span>
       </div>
     );
   }
+
 
   if (error && !parsed.response) {
     return <div>Something went wrong. Please try again.</div>;
@@ -191,42 +192,41 @@ const MessageContent = ({
           a: ({ node, ...props }) => (
             <a
               {...props}
-              className="text-blue-500 underline hover:text-blue-700"
+              className="text-blue-500 underline hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
               target="_blank"
               rel="noopener noreferrer"
             />
           ),
           p: ({ node, ...props }) => (
-            <p {...props} className="text-gray-700 leading-relaxed mb-4" />
+            <p {...props} className="text-gray-200 leading-relaxed mb-4" />
           ),
           h1: ({ node, ...props }) => (
-            <h1 {...props} className="text-3xl font-bold mb-4" />
+            <h1 {...props} className="text-3xl font-bold mb-4 text-gray-900 dark:text-white" />
           ),
           h2: ({ node, ...props }) => (
-            <h2 {...props} className="text-2xl font-semibold mb-3" />
+            <h2 {...props} className="text-2xl font-semibold mb-3 text-gray-800 dark:text-gray-100" />
           ),
           h3: ({ node, ...props }) => (
-            <h3 {...props} className="text-xl font-medium mb-2" />
+            <h3 {...props} className="text-xl font-medium mb-2 text-gray-800 dark:text-gray-100" />
           ),
           h4: ({ node, ...props }) => (
-            <h4 {...props} className="text-lg font-medium mb-1" />
+            <h4 {...props} className="text-lg font-medium mb-1 text-gray-700 dark:text-gray-200" />
           ),
           ul: ({ node, ...props }) => (
-            <ul {...props} className="list-disc pl-6 mb-4 text-gray-700" />
+            <ul {...props} className="list-disc pl-6 mb-4 text-gray-700 dark:text-gray-200" />
           ),
           ol: ({ node, ...props }) => (
-            <ol {...props} className="list-decimal pl-6 mb-4 text-gray-700" />
+            <ol {...props} className="list-decimal pl-6 mb-4 text-gray-700 dark:text-gray-200" />
           ),
           li: ({ node, ...props }) => (
-            <li {...props} className="mb-2 text-gray-700" />
+            <li {...props} className="mb-2 text-gray-700 dark:text-gray-200" />
           ),
           blockquote: ({ node, ...props }) => (
             <blockquote
               {...props}
-              className="border-l-4 border-gray-300 pl-4 italic text-gray-600 mb-4"
+              className="border-l-4 border-gray-300 dark:border-gray-600 pl-4 italic text-gray-600 dark:text-gray-300 mb-4"
             />
           ),
-
           img: ({ node, ...props }) => (
             <img
               {...props}
@@ -235,22 +235,25 @@ const MessageContent = ({
             />
           ),
           hr: ({ node, ...props }) => (
-            <hr {...props} className="border-gray-300 my-4" />
+            <hr {...props} className="border-gray-300 dark:border-gray-600 my-4" />
           ),
           table: ({ node, ...props }) => (
             <table
               {...props}
-              className="table-auto w-full border-collapse border border-gray-300 mb-4"
+              className="table-auto w-full border-collapse border border-gray-300 dark:border-gray-600 mb-4"
             />
           ),
           th: ({ node, ...props }) => (
             <th
               {...props}
-              className="border border-gray-300 bg-gray-200 p-2 text-left"
+              className="border border-gray-300 dark:border-gray-600 bg-gray-200 dark:bg-gray-700 p-2 text-left text-gray-800 dark:text-gray-100"
             />
           ),
           td: ({ node, ...props }) => (
-            <td {...props} className="border border-gray-300 p-2 text-left" />
+            <td
+              {...props}
+              className="border border-gray-300 dark:border-gray-600 p-2 text-left text-gray-700 dark:text-gray-200"
+            />
           ),
         }}
       >
@@ -262,6 +265,7 @@ const MessageContent = ({
       )}
     </>
   );
+
 };
 
 // Define a type for the model
